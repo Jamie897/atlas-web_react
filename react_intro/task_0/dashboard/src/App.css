@@ -1,42 +1,4 @@
-.App-header {
-  display: flex;
-}
-
-h1 {
-  color: red;
-  /* text-align: center; */
-  vertical-align: middle;
-  padding-top: 4rem;
-  padding-bottom: 4rem;
-  width: 50%;
-}
-
-hr {
-  height: 3px;
-  background-color: red;
-}
-
-body {
-  font-family: Arial, sans-serif;
-}
-
-.App-logo {
-  width: 250px;
-}
-
-.login {
-  margin-top: 3rem;
-  margin-left: 2rem;
-  margin-bottom: 25rem;
-}
-
-.copyright {
-  font-style: italic;
-  text-align: center;
-}
-
-
-/* .App {
+.App {
   text-align: center;
 }
 
@@ -73,4 +35,4 @@ body {
   to {
     transform: rotate(360deg);
   }
-} */
+}
