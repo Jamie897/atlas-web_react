@@ -1,4 +1,12 @@
 .Notifications {
-    border: 3px dotted red;
-    padding-top: 1rem;
-  }
+  border: 2px dotted red;
+  padding: 10px;
+}
+
+.Notifications li[data-priority="default"] {
+  color: rgb(4, 4, 126);
+}
+
+.Notifications li[data-priority="urgent"] {
+  color: rgb(255, 0, 0);
+}
