@@ -16,10 +16,10 @@ function App() {
         <body className='App-body'>
           <p className='login'>Login to access the full dashboard</p>
           <label className='email' htmlFor="email">Email:</label>
-          <input className='lilSpace' type="email" id="email" name="email"/>
-          <label className='lilSpace' htmlFor="pwd"> Password:</label>
-          <input className='lilSpace' type="password" id="pwd" name="pwd"/>
-          <button className='lilSpace'>OK</button>
+          <input className='Timmy' type="email" id="email" name="email"/>
+          <label className='Timmy' htmlFor="pwd"> Password:</label>
+          <input className='Timmy' type="password" id="pwd" name="pwd"/>
+          <button className='Timmy'>OK</button>
         </body>
       </div>
       <hr></hr>
