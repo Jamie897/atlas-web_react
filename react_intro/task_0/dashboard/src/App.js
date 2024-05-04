@@ -1,5 +1,5 @@
 import './App.css';
-import holbertonLogo from './holberton-logo.png';
+import holbertonLogo from './holberton-logo.jpg';
 
 function App() {
   return (
