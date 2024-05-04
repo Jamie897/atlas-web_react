@@ -12,6 +12,8 @@
     "commondir": "^1.0.1",
     "concat-map": "^0.0.1",
     "email-addresses": "^5.0.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter": "^0.0.1-security.0",
     "escape-string-regexp": "^1.0.5",
     "filename-reserved-regex": "^2.0.0",
     "filenamify": "^4.3.0",
@@ -46,7 +48,6 @@
     "universalify": "^2.0.1",
     "wrappy": "^1.0.2"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
