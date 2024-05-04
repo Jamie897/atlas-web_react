@@ -1,6 +1,7 @@
 {
   "name": "react_intro",
   "version": "1.0.0",
+  "homepage": "https://Jamie897.github.io/atlas-web_react",
   "main": "index.js",
   "dependencies": {
     "array-union": "^1.0.2",
