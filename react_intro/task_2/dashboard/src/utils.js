@@ -1,13 +1,17 @@
 function getFullYear() {
-    return 2024
+  return 2024
+}
+
+function getFooterCopy(isIndex) {
+  if (isIndex === true) {
+    return 'Holberton School'
+  } else {
+    return 'Holberton School main dashboard'
   }
-  
-  function getFooterCopy(isIndex) {
-    if (isIndex === true) {
-      return 'Holberton School'
-    } else {
-      return 'Holberton School main dashboard'
-    }
-  }
-  
-  export { getFullYear, getFooterCopy };
+}
+
+function getLatestNotification() {
+  return '<strong>Urgent requirement</strong> - complete by EOD'
+}
+
+export { getFullYear, getFooterCopy, getLatestNotification };
