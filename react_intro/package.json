@@ -4,6 +4,6 @@
     "jest": "^29.7.0"
   },
   "dependencies": {
-    "react-dom": "^16.14.0"
+    "react-dom": "^18.3.1"
   }
 }
