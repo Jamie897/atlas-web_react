@@ -1,21 +1,24 @@
-import React, { Component } from 'react'
-import './Notifications.css'
-import { getLatestNotification } from './utils'
+import React from 'react';
+import { shallow } from 'enzyme';
+import Notifications from './Notifications';
 
-class Notification extends Component {
-  render() {
-    return (
-      <div className='Notifications'>
-        <button className='close-button' type='button' onClick={() => console.log('Close button has been clicked')} style={{ display: 'inline', position: 'fixed', top: 10 + 'px', right: 10 + 'px', background: 'none', border: 'none' }} aria-label='Close'><span style={{ fontSize: '24px' }} aria-hidden="true">&times;</span></button>
-        <p>Here is the list of notifications</p>
-        <ul>
-          <li data-priority='default'>New course available</li>
-          <li data-priority='urgent'>New resume available</li>
-          <li data-priority='urgent' dangerouslySetInnerHTML={{__html: getLatestNotification()}}></li>
-        </ul>
-      </div>
-    )
-  }
-}
+describe('Notifications component tests', () => {
+    let wrapper;
 
-export default Notification
+    // This will run before each test and create a shallow render of the Notifications component
+    beforeEach(() => {
+        wrapper = shallow(<Notifications />);
+    });
+
+    test('Notifications renders without crashing', () => {
+        expect(wrapper.exists()).toBe(true);
+    });
+
+    test('Notifications renders three list items', () => {
+        expect(wrapper.find('li').length).toBe(3);
+    });
+
+    test('Notifications renders the text "Here is the list of notifications"', () => {
+        expect(wrapper.text().includes('Here is the list of notifications')).toBe(true);
+    });
+});
