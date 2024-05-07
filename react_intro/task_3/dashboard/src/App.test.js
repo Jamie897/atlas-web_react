@@ -5,7 +5,6 @@ import App from './App';
 describe('App component tests', () => {
     let wrapper;
 
-    // This will run before each test and create a shallow render of the App component
     beforeEach(() => {
         wrapper = shallow(<App />);
     });
