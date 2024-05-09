@@ -1,0 +1,93 @@
+/* .App-header {
+  display: flex;
+}
+
+h1 {
+  color: red;
+  vertical-align: middle;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  width: 50%;
+}
+
+hr {
+  height: 3px;
+  background-color: red;
+} */
+
+main p, label {
+    font-weight: 900;
+  }
+  
+  .App-logo {
+    width: 250px;
+  }
+  
+  .App-body {
+    padding-bottom: 25rem;
+  }
+  
+  .login {
+    margin-top: 3rem;
+    margin-left: 2rem;
+  }
+  
+  .email {
+    margin-left: 2rem;
+  }
+  .lilSpace {
+    margin-left: 0.5rem;;
+  }
+  
+  /* .copyright {
+    font-style: italic;
+    text-align: center;
+  } */
+  
+  li[data-priority='default'] {
+    color: navy;
+  }
+  
+  li[data-priority='urgent'] {
+    color: red;
+  }
+  
+  
+  /* .App {
+    text-align: center;
+  }
+  
+  .App-logo {
+    height: 40vmin;
+    pointer-events: none;
+  }
+  
+  @media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+      animation: App-logo-spin infinite 20s linear;
+    }
+  }
+  
+  .App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+  
+  .App-link {
+    color: #61dafb;
+  }
+  
+  @keyframes App-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  } */
