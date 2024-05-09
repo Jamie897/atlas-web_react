@@ -7,7 +7,8 @@ import Login from "../Login/Login";
 import "./App.css";
 import CourseList from "../CourseList/CourseList";
 import { getLatestNotification } from "../utils/utils";
-
+import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
+import BodySection from "../BodySection/BodySection";
 
 const listCourses = [
   {id: 1, name: 'ES6', credit: 60},
@@ -25,7 +26,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.handlePress = this.handlePress.bind(this)
-
   }
 
   componentDidMount() {
@@ -51,7 +51,19 @@ class App extends React.Component {
       <div className="App">
         <Header />
       </div>
-      <div className="App-body">{!this.props.isLoggedIn ? <Login /> : <CourseList listCourses={listCourses}/>}</div>
+      <div className="App-body">
+        {!this.props.isLoggedIn ? 
+          <BodySectionWithMarginBottom title="Log in to continue">
+            <Login /> 
+          </BodySectionWithMarginBottom> : 
+          <BodySectionWithMarginBottom title="Course list">
+            <CourseList listCourses={listCourses}/>
+          </BodySectionWithMarginBottom>
+        }
+        <BodySection title="News from the School">
+          <p>New News</p>
+        </BodySection>
+      </div>
       <div className="App-footer">
         <Footer />
       </div>
