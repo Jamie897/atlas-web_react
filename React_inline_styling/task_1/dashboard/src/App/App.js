@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   appBody: {
     backgroundColor: '#f5f5f5',
   },
-   Footer: {
+   footer: {
     textAlign: 'center',
     marginTop: '20px',
     color: '#888',
