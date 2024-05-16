@@ -29,6 +29,11 @@ describe('CourseListRow component tests', () => {
             expect(thElements.at(0).text()).toBe('First Cell');
             expect(thElements.at(1).text()).toBe('Second Cell');
         });
+
+        test('Applies background color #deb5b545 to header row', () => {
+            wrapper = createWrapper({ isHeader: true, textFirstCell: 'Test Header' });
+            expect(wrapper.prop('style')).toEqual({ backgroundColor: '#deb5b545' });
+        });
     });
 
     describe('tests for isHeader being false', () => {
@@ -46,6 +51,11 @@ describe('CourseListRow component tests', () => {
             expect(tdElements).toHaveLength(2);
             expect(tdElements.at(0).text()).toBe('First Cell');
             expect(tdElements.at(1).text()).toBe('Second Cell');
+        });
+
+        test('Applies background color #f5f5f5ab to regular row', () => {
+            wrapper = createWrapper({ isHeader: false, textFirstCell: 'Test Data' });
+            expect(wrapper.prop('style')).toEqual({ backgroundColor: '#f5f5f5ab' });
         });
     });
 });
