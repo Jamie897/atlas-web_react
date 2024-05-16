@@ -4,11 +4,11 @@ import Notifications from "../Notifications/Notifications";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import Login from "../Login/Login";
-import "./App.css";
 import CourseList from "../CourseList/CourseList";
-import { getLatestNotification } from "../utils/utils";
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import BodySection from "../BodySection/BodySection";
+import { StyleSheet, css } from 'aphrodite';
+import { getLatestNotification } from "../utils/utils";
 
 const listCourses = [
   {id: 1, name: 'ES6', credit: 60},
@@ -21,6 +21,22 @@ const listNotifications = [
   {id: 2, type: 'urgent', value: 'New resume available'},
   {id: 3, type: 'urgent', html: { __html: getLatestNotification() }}
 ]
+
+const styles = StyleSheet.create({
+  body: {
+    margin: 0,
+    padding: 0,
+    fontFamily: 'Arial, sans-serif',
+  },
+  appBody: {
+    backgroundColor: '#f5f5f5',
+  },
+  appFooter: {
+    textAlign: 'center',
+    marginTop: '20px',
+    color: '#888',
+  },
+});
 
 class App extends React.Component {
   constructor(props) {
@@ -48,10 +64,10 @@ class App extends React.Component {
     return(  
     <>
       <Notifications listNotifications={listNotifications}/>
-      <div className="App">
+      <div className={css(styles.body)}>
         <Header />
       </div>
-      <div className="App-body">
+      <div className={css(styles.appBody)}>
         {!this.props.isLoggedIn ? 
           <BodySectionWithMarginBottom title="Log in to continue">
             <Login /> 
@@ -64,7 +80,7 @@ class App extends React.Component {
           <p>New News</p>
         </BodySection>
       </div>
-      <div className="App-footer">
+      <div className={css(styles.appFooter)}>
         <Footer />
       </div>
     </>
