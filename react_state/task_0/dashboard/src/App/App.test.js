@@ -35,4 +35,27 @@ describe('<App />', () => {
     expect(logOut).toHaveBeenCalled();
     expect(global.alert).toHaveBeenCalledWith('Logging you out');
   });
+
+  // Test to verify the default state of displayDrawer is false
+  it('default state for displayDrawer is false', () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.state('displayDrawer')).toEqual(false);
+  });
+
+  // Test to verify that handleDisplayDrawer sets displayDrawer to true
+  it('handleDisplayDrawer sets displayDrawer to true', () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.state('displayDrawer')).toEqual(false); // ensure default state
+    wrapper.instance().handleDisplayDrawer();
+    expect(wrapper.state('displayDrawer')).toEqual(true);
+  });
+
+  // Test to verify that handleHideDrawer sets displayDrawer to false
+  it('handleHideDrawer sets displayDrawer to false', () => {
+    const wrapper = shallow(<App />);
+    wrapper.instance().handleDisplayDrawer(); // Set it to true first
+    expect(wrapper.state('displayDrawer')).toEqual(true);
+    wrapper.instance().handleHideDrawer();
+    expect(wrapper.state('displayDrawer')).toEqual(false);
+  });
 });
