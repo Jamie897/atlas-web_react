@@ -12,6 +12,21 @@ describe('Test Notification.js', () => {
     { id: 3, type: 'urgent', html: { __html: getLatestNotification()} }
   ];
 
+  it('clicking on the menu item calls handleDisplayDrawer', () => {
+    const handleDisplayDrawer = jest.fn();
+    const wrapper = shallow(<Notifications handleDisplayDrawer={handleDisplayDrawer} />);
+    wrapper.find('.menuItem').simulate('click');
+    expect(handleDisplayDrawer).toHaveBeenCalled();
+  });
+
+  it('clicking on the close button calls handleHideDrawer', () => {
+    const handleHideDrawer = jest.fn();
+    const wrapper = shallow(<Notifications displayDrawer={true} handleHideDrawer={handleHideDrawer} />);
+    wrapper.find('button').simulate('click');
+    expect(handleHideDrawer).toHaveBeenCalled();
+  });
+
+
   it('Notification renders without crashing', () => {
     expect(shallow(<Notifications />).exists());
   });

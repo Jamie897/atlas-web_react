@@ -3,16 +3,7 @@ import PropTypes from "prop-types";
 import NotificationItem from "./NotificationItem";
 import closeButton from "../assets/close-icon.png";
 import NotificationItemShape from "./NotificationItemShape";
-import { StyleSheet, css, keyframes } from "aphrodite";
-
-const fadeIn = keyframes({
-  "0%": {
-    opacity: 0,
-  },
-  "100%": {
-    opacity: 1,
-  },
-});
+import { StyleSheet, css } from "aphrodite";
 
 const styles = StyleSheet.create({
   notifications: {
@@ -26,9 +17,13 @@ const styles = StyleSheet.create({
     padding: 0, // Remove padding
     fontSize: "20px", // Set font size to 20px
     overflowY: "auto", // Allow scrolling if content overflows
-    animationName: fadeIn,
-    animationDuration: "0.5s",
-    animationTimingFunction: "ease-in-out",
+  },
+  menuItem: {
+    cursor: "pointer",
+    backgroundColor: "#fff8f8",
+    float: "right",
+    padding: "10px",
+    borderBottom: "1px solid black",
   },
 });
 
@@ -47,11 +42,12 @@ class Notifications extends React.Component {
   }
 
   render() {
+    const { displayDrawer, handleDisplayDrawer, handleHideDrawer } = this.props;
     return (
       <>
-        <div className="menuItem">Your notifications</div>
+        <div className={css(styles.menuItem)} onClick={handleDisplayDrawer}>Your notifications</div>
 
-        {this.props.displayDrawer ? (
+        {displayDrawer && (
           <div className={css(styles.notifications)}>
             <button
               style={{
@@ -61,32 +57,29 @@ class Notifications extends React.Component {
                 background: "transparent",
               }}
               aria-label="close"
-              onClick={() => console.log("Close button has been clicked")}
+              onClick={handleHideDrawer}
             >
-              <img src={closeButton} alt="close button icon" />
+              <img src={closeButton} alt="Close button icon" />
             </button>
             <p>Here is the list of notifications</p>
-            <ul className={css(styles.notifications)}>
+            <ul>
               {this.props.listNotifications.length === 0 ? (
                 <NotificationItem value="No new notification for now" type="no-new" />
               ) : (
-                <></>
+                this.props.listNotifications.map((not) => (
+                  <NotificationItem
+                    key={not.id}
+                    type={not.type}
+                    value={not.value}
+                    html={not.html}
+                    markAsRead={() => {
+                      this.markAsRead(not.id);
+                    }}
+                  />
+                ))
               )}
-              {this.props.listNotifications.map((not) => (
-                <NotificationItem
-                  key={not.id}
-                  type={not.type}
-                  value={not.value}
-                  html={not.html}
-                  markAsRead={() => {
-                    this.markAsRead(not.id);
-                  }}
-                />
-              ))}
             </ul>
           </div>
-        ) : (
-          <></>
         )}
       </>
     );
@@ -96,11 +89,15 @@ class Notifications extends React.Component {
 Notifications.defaultProps = {
   displayDrawer: false,
   listNotifications: [],
+  handleDisplayDrawer: () => {},
+  handleHideDrawer: () => {},
 };
 
 Notifications.propTypes = {
   displayDrawer: PropTypes.bool,
   listNotifications: PropTypes.arrayOf(NotificationItemShape),
+  handleDisplayDrawer: PropTypes.func,
+  handleHideDrawer: PropTypes.func,
 };
 
 export default Notifications;
