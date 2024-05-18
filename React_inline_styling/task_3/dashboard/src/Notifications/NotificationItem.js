@@ -3,38 +3,29 @@ import PropTypes from "prop-types";
 import { StyleSheet, css } from "aphrodite";
 
 const styles = StyleSheet.create({
-  defaultItem: {
-    color: "#333", // Example default color
-  },
-  urgentItem: {
-    color: "red", // Example urgent color
-    fontWeight: "bold", // Example font weight for urgent items
+  notificationItem: {
+    width: "100%",
+    fontSize: "20px",
+    padding: "10px 8px",
+    borderBottom: "1px solid black",
   },
 });
 
-class NotificationItem extends React.PureComponent {
+class NotificationItem extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
-    const { type, value, html, markAsRead, id } = this.props;
+    const { type, value, html, markAsRead } = this.props;
 
-    // Determine the appropriate style based on the type
-    const itemStyle =
-      type === "urgent" ? css(styles.urgentItem) : css(styles.defaultItem);
-
-    // Render the notification item with appropriate styling
-    return html ? (
+    return (
       <li
-        className={itemStyle}
+        className={css(styles.notificationItem)}
         data-notification-type={type}
-        dangerouslySetInnerHTML={html}
-        onClick={() => markAsRead(id)}
-      ></li>
-    ) : (
-      <li
-        className={itemStyle}
-        data-notification-type={type}
-        onClick={() => markAsRead(id)}
+        onClick={() => markAsRead()}
       >
-        {value}
+        {value ? value : <div dangerouslySetInnerHTML={html}></div>}
       </li>
     );
   }
@@ -54,7 +45,6 @@ NotificationItem.propTypes = {
     __html: PropTypes.string,
   }),
   markAsRead: PropTypes.func,
-  id: PropTypes.number,
 };
 
 export default NotificationItem;
