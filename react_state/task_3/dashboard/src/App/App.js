@@ -49,12 +49,14 @@ class App extends React.Component {
         password: '',
         isLoggedIn: false,
       },
+      listNotifications: listNotifications, // Set listNotifications within the state
     };
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
     this.handleHideDrawer = this.handleHideDrawer.bind(this);
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.markNotificationAsRead = this.markNotificationAsRead.bind(this); // Create markNotificationAsRead function
   }
 
   componentDidMount() {
@@ -101,8 +103,15 @@ class App extends React.Component {
     });
   }
 
+  // Function to mark notification as read
+  markNotificationAsRead(id) {
+    this.setState(prevState => ({
+      listNotifications: prevState.listNotifications.filter(notification => notification.id !== id)
+    }));
+  }
+
   render() {
-    const { user, displayDrawer } = this.state;
+    const { user, displayDrawer, listNotifications } = this.state;
 
     return (
       <>
@@ -111,6 +120,7 @@ class App extends React.Component {
           listNotifications={listNotifications}
           handleDisplayDrawer={this.handleDisplayDrawer}
           handleHideDrawer={this.handleHideDrawer}
+          markNotificationAsRead={this.markNotificationAsRead} // Pass the markNotificationAsRead function
         />
         <div className={css(styles.body)}>
           <Header />
