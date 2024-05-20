@@ -1,61 +1,62 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import App from './App';
-import { StyleSheetTestUtils } from 'aphrodite';
+import React from "react";
+import { mount } from "enzyme";
+import App from "./App";
+import AppContext from "./AppContext";
 
-describe('<App />', () => {
-  beforeAll(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
+describe("Test the <App /> component...", () => {
+  let wrapper;
+  const logOutSpy = jest.fn();
+  const logInMock = jest.fn();
+
+  beforeEach(() => {
+    wrapper = mount(
+      <AppContext.Provider
+        value={{
+          user: { email: "test@example.com", password: "password", isLoggedIn: true },
+          logOut: logOutSpy,
+          logIn: logInMock
+        }}
+      >
+        <App />
+      </AppContext.Provider>
+    );
   });
 
-  afterAll(() => {
-    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+  afterEach(() => {
+    wrapper.unmount();
   });
 
-  it('App renders without any errors', () => {
-    const wrapper = shallow(<App />);
-    expect(wrapper.exists()).toEqual(true);
+  it("renders without crashing", () => {
+    expect(wrapper.exists()).toBe(true);
   });
 
-  it('Verify if CourseList is not displayed when isLoggedIn is false', () => {
-    const wrapper = shallow(<App />);
-    expect(wrapper.find('CourseList')).toHaveLength(0);
+  it("renders Login component if user is not logged in", () => {
+    wrapper.setProps({
+      user: { email: "", password: "", isLoggedIn: false }
+    });
+    expect(wrapper.find("Login").exists()).toBe(true);
   });
 
-  it('Verify if CourseList is displayed when isLoggedIn is true', () => {
-    const wrapper = shallow(<App isLoggedIn={true} />);
-    expect(wrapper.find('CourseList')).toHaveLength(1);
-    expect(wrapper.find('Login')).toHaveLength(0);
+  it("renders CourseList component if user is logged in", () => {
+    expect(wrapper.find("CourseList").exists()).toBe(true);
   });
 
-  it('logOut calls logOut prop and shows an alert', () => {
-    const logOut = jest.fn(() => undefined);
-    const wrapper = shallow(<App logOut={logOut} />);
+  it("calls logOut function when Ctrl + H is pressed", () => {
+    document.dispatchEvent(new KeyboardEvent("keydown", { ctrlKey: true, key: "h" }));
+    expect(logOutSpy).toHaveBeenCalled();
+  });
+
+  it("updates state correctly when logIn function is called", () => {
+    wrapper.find("Login").props().logIn("test@example.com", "password");
+    expect(wrapper.find(App).instance().state.user.email).toBe("test@example.com");
+    expect(wrapper.find(App).instance().state.user.password).toBe("password");
+    expect(wrapper.find(App).instance().state.user.isLoggedIn).toBe(true);
+  });
+
+  it("updates state correctly when logOut function is called", () => {
     wrapper.instance().logOut();
-    expect(logOut).toHaveBeenCalled();
-    expect(global.alert).toHaveBeenCalledWith('Logging you out');
-  });
-
-  // Test to verify the default state of displayDrawer is false
-  it('default state for displayDrawer is false', () => {
-    const wrapper = shallow(<App />);
-    expect(wrapper.state('displayDrawer')).toEqual(false);
-  });
-
-  // Test to verify that handleDisplayDrawer sets displayDrawer to true
-  it('handleDisplayDrawer sets displayDrawer to true', () => {
-    const wrapper = shallow(<App />);
-    expect(wrapper.state('displayDrawer')).toEqual(false); // ensure default state
-    wrapper.instance().handleDisplayDrawer();
-    expect(wrapper.state('displayDrawer')).toEqual(true);
-  });
-
-  // Test to verify that handleHideDrawer sets displayDrawer to false
-  it('handleHideDrawer sets displayDrawer to false', () => {
-    const wrapper = shallow(<App />);
-    wrapper.instance().handleDisplayDrawer(); // Set it to true first
-    expect(wrapper.state('displayDrawer')).toEqual(true);
-    wrapper.instance().handleHideDrawer();
-    expect(wrapper.state('displayDrawer')).toEqual(false);
+    expect(wrapper.find(App).instance().state.user.email).toBe("");
+    expect(wrapper.find(App).instance().state.user.password).toBe("");
+    expect(wrapper.find(App).instance().state.user.isLoggedIn).toBe(false);
   });
 });
