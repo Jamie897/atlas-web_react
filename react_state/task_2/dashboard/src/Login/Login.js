@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import PropTypes from 'prop-types'; // Import PropTypes for type checking
 import { StyleSheet, css } from 'aphrodite';
+import AppContext from '../App/AppContext'; // Import the context
 
 const styles = StyleSheet.create({
   login: {
@@ -33,21 +35,21 @@ function Login() {
   });
 
   const [enableSubmit, setEnableSubmit] = useState(false);
+  const { logIn } = useContext(AppContext); // Get logIn function from context
 
   const handleLoginSubmit = (event) => {
     event.preventDefault();
-    // Handle login submission with formData.email and formData.password
-    console.log('Email:', formData.email);
-    console.log('Password:', formData.password);
-    // For demonstration purposes, set isLoggedIn to true
-    setIsLoggedIn(true);
+    logIn(formData.email, formData.password);
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-    // Enable submit button if both email and password are not empty
-    setEnableSubmit(formData.email.trim() !== '' && formData.password.trim() !== '');
+    setFormData((prevData) => {
+      const newFormData = { ...prevData, [name]: value };
+      // Enable submit button if both email and password are not empty
+      setEnableSubmit(newFormData.email.trim() !== '' && newFormData.password.trim() !== '');
+      return newFormData;
+    });
   };
 
   return (
@@ -86,26 +88,8 @@ function Login() {
   );
 }
 
+Login.propTypes = {
+  logIn: PropTypes.func.isRequired, // Ensure logIn is passed and is a function
+};
+
 export default Login;
-
-import React from 'react';
-import { shallow } from 'enzyme';
-import Login from './Login';
-
-describe('<Login />', () => {
-  it('Submit button is disabled by default', () => {
-    const wrapper = shallow(<Login />);
-    const submitButton = wrapper.find('input[type="submit"]');
-    expect(submitButton.prop('disabled')).toBe(true);
-  });
-
-  it('Submit button is enabled after changing the input values', () => {
-    const wrapper = shallow(<Login />);
-    const emailInput = wrapper.find('input[name="email"]');
-    const passwordInput = wrapper.find('input[name="password"]');
-    emailInput.simulate('change', { target: { name: 'email', value: 'test@test.com' } });
-    passwordInput.simulate('change', { target: { name: 'password', value: 'password123' } });
-    const submitButton = wrapper.find('input[type="submit"]');
-    expect(submitButton.prop('disabled')).toBe(false);
-  });
-});

@@ -44,10 +44,17 @@ class App extends React.Component {
     super(props);
     this.state = {
       displayDrawer: false,
+      user: {
+        email: '',
+        password: '',
+        isLoggedIn: false,
+      },
     };
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
     this.handleHideDrawer = this.handleHideDrawer.bind(this);
+    this.logIn = this.logIn.bind(this);
+    this.logOut = this.logOut.bind(this);
   }
 
   componentDidMount() {
@@ -62,7 +69,7 @@ class App extends React.Component {
     if (event.ctrlKey && event.key === 'h') {
       event.preventDefault();
       alert('Logging you out');
-      this.props.logOut();
+      this.logOut();
     }
   }
 
@@ -74,11 +81,33 @@ class App extends React.Component {
     this.setState({ displayDrawer: false });
   }
 
+  logIn(email, password) {
+    this.setState({
+      user: {
+        email: email,
+        password: password,
+        isLoggedIn: true,
+      },
+    });
+  }
+
+  logOut() {
+    this.setState({
+      user: {
+        email: '',
+        password: '',
+        isLoggedIn: false,
+      },
+    });
+  }
+
   render() {
+    const { user, displayDrawer } = this.state;
+
     return (
       <>
         <Notifications
-          displayDrawer={this.state.displayDrawer}
+          displayDrawer={displayDrawer}
           listNotifications={listNotifications}
           handleDisplayDrawer={this.handleDisplayDrawer}
           handleHideDrawer={this.handleHideDrawer}
@@ -87,14 +116,15 @@ class App extends React.Component {
           <Header />
         </div>
         <div className={css(styles.appBody)}>
-          {!this.props.isLoggedIn ?
+          {!user.isLoggedIn ? (
             <BodySectionWithMarginBottom title="Log in to continue">
-              <Login />
-            </BodySectionWithMarginBottom> :
+              <Login logIn={this.logIn} />
+            </BodySectionWithMarginBottom>
+          ) : (
             <BodySectionWithMarginBottom title="Course list">
               <CourseList listCourses={listCourses} />
             </BodySectionWithMarginBottom>
-          }
+          )}
           <BodySection title="News from the School">
             <p>New News</p>
           </BodySection>
@@ -106,15 +136,5 @@ class App extends React.Component {
     );
   }
 }
-
-App.defaultProps = {
-  isLoggedIn: false,
-  logOut: () => undefined
-};
-
-App.propTypes = {
-  isLoggedIn: PropTypes.bool,
-  logOut: PropTypes.func
-};
 
 export default App;
