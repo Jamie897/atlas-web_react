@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import NotificationItem from "./NotificationItem";
 import closeButton from "../assets/close-icon.png";
@@ -27,14 +27,12 @@ const styles = StyleSheet.create({
   },
 });
 
-class Notifications extends PureComponent {
+class Notifications extends React.PureComponent {
   render() {
     const { displayDrawer, handleDisplayDrawer, handleHideDrawer, listNotifications, markNotificationAsRead } = this.props;
     return (
       <>
-        <div className={css(styles.menuItem)} onClick={handleDisplayDrawer}>
-          Your notifications
-        </div>
+        <div className={css(styles.menuItem)} onClick={handleDisplayDrawer}>Your notifications</div>
 
         {displayDrawer && (
           <div className={css(styles.notifications)}>
