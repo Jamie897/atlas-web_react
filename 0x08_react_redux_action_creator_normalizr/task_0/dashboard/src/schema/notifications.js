@@ -1,14 +1,16 @@
+import { normalize } from 'normalizr';
+import * as notificationsData from '../../notifications.json';
+import { notification } from '../schema/notifications';
 
-import * as notificationsData from "../../notifications.json";
-
-// function that accepts userId as an argument and returns all notifications for that user from the notifications.json file.
-// returns list of all notifications for that user from the notifications.json file that matches the given userId
-
+// Function that accepts userId as an argument and returns all notifications for that user from the notifications.json file
 export const getAllNotificationsByUser = (userId) => {
-  const notifications = notificationsData.default;
+  // Normalize the notifications data
+  const normalizedData = normalize(notificationsData.default, [notification]);
 
+  // Get notifications for the specified user
+  const userNotifications = Object.values(normalizedData.entities.notifications)
+    .filter((notification) => notification.author === userId)
+    .map((notification) => notification.context);
 
-  return notifications
-    .filter((notification) => notification.author.id === userId)
-    .map((notification) => notification.context); 
+  return userNotifications;
 };
