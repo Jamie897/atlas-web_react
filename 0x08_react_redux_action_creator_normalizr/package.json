@@ -3,5 +3,10 @@
     "react-redux": "^9.1.2",
     "redux": "^5.0.1",
     "redux-thunk": "^3.1.0"
+  },
+  "devDependencies": {
+    "fetch-mock": "^9.11.0",
+    "node-fetch": "^3.3.2",
+    "redux-mock-store": "^1.5.4"
   }
 }
