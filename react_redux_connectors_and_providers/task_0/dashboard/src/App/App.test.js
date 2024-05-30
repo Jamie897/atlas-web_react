@@ -8,10 +8,11 @@ import { mapStateToProps } from './App';
 describe('mapStateToProps function', () => {
   it('returns the right object when passing the state with isLoggedIn as true', () => {
     const state = fromJS({
-      isUserLoggedIn: true
+      isUserLoggedIn: true,
+      isNotificationDrawerVisible: false // Add isNotificationDrawerVisible to the state
     });
     const props = mapStateToProps(state);
-    expect(props).toEqual({ isLoggedIn: true });
+    expect(props).toEqual({ isLoggedIn: true, displayDrawer: false }); // Updated assertion
   });
 
 describe("Test the <App /> component...", () => {

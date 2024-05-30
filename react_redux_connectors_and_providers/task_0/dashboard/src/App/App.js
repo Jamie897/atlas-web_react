@@ -14,6 +14,7 @@ import BodySection from "../BodySection/BodySection";
 import { getLatestNotification } from "../utils/utils";
 import { fromJS } from 'immutable';
 import { mapStateToProps } from './App';
+import { displayNotificationDrawer, hideNotificationDrawer };
 
 const listCourses = [
   { id: 1, name: 'ES6', credit: 60 },
@@ -121,7 +122,7 @@ class App extends React.Component {
           listNotifications={listNotifications}
           handleDisplayDrawer={this.handleDisplayDrawer}
           handleHideDrawer={this.handleHideDrawer}
-          markNotificationAsRead={this.markNotificationAsRead} // Pass the markNotificationAsRead function
+          markNotificationAsRead={this.markNotificationAsRead}
         />
         <div className={css(styles.body)}>
           <Header />
@@ -150,13 +151,13 @@ class App extends React.Component {
 
 App.propTypes = {
   isLoggedIn: PropTypes.bool,
+  displayDrawer: PropTypes.bool.isRequired,
+  displayNotificationDrawer: PropTypes.func.isRequired,
+  hideNotificationDrawer: PropTypes.func.isRequired,
 };
 
 App.defaultProps = {
   isLoggedIn: false,
 };
 
-export const mapStateToProps = (state) => ({
-  isLoggedIn: state.get('isUserLoggedIn'),
-  displayDrawer: state.get('isNotificationDrawerVisible'),
-});
+export default connect(mapStateToProps, { displayNotificationDrawer, hideNotificationDrawer })(App);
