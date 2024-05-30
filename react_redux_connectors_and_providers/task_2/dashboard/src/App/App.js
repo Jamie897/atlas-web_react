@@ -6,11 +6,9 @@ import Footer from '../Footer/Footer';
 import Notifications from '../Notifications/Notifications';
 import CourseList from '../CourseList/CourseList';
 import BodySection from '../BodySection/BodySection';
-import SchoolNews from '../SchoolNews/SchoolNews';
 import { StyleSheet, css } from 'aphrodite';
 import PropTypes from 'prop-types';
 import { Map, List } from 'immutable';
-import { markAsRead } from '../actions/notificationActionCreators';
 import {
   loginRequest,
   displayNotificationDrawer,
