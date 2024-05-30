@@ -1,7 +1,9 @@
+// src/App/App.js
+
 import React from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, css } from 'aphrodite';
-
+import { connect } from 'react-redux';
 import Notifications from "../Notifications/Notifications";
 import Header from "../Header/Header";
 import Login from "../Login/Login";
@@ -44,11 +46,6 @@ class App extends React.Component {
     super(props);
     this.state = {
       displayDrawer: false,
-      user: {
-        email: '',
-        password: '',
-        isLoggedIn: false,
-      },
       listNotifications: listNotifications, // Set listNotifications within the state
     };
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -111,7 +108,8 @@ class App extends React.Component {
   }
 
   render() {
-    const { user, displayDrawer, listNotifications } = this.state;
+    const { displayDrawer, listNotifications } = this.state;
+    const { isLoggedIn } = this.props;
 
     return (
       <>
@@ -126,7 +124,7 @@ class App extends React.Component {
           <Header />
         </div>
         <div className={css(styles.appBody)}>
-          {!user.isLoggedIn ? (
+          {!isLoggedIn ? (
             <BodySectionWithMarginBottom title="Log in to continue">
               <Login logIn={this.logIn} />
             </BodySectionWithMarginBottom>
@@ -147,4 +145,17 @@ class App extends React.Component {
   }
 }
 
-export default App;
+App.propTypes = {
+  isLoggedIn: PropTypes.bool,
+};
+
+App.defaultProps = {
+  isLoggedIn: false,
+};
+
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.ui.get('isUserLoggedIn'),
+});
+
+export default connect(mapStateToProps)(App);
+
