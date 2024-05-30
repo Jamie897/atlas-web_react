@@ -1,5 +1,3 @@
-// src/App/App.js
-
 import React from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, css } from 'aphrodite';
@@ -158,6 +156,4 @@ App.defaultProps = {
   isLoggedIn: false,
 };
 
-const mapStateToProps = (state) => ({
-  isLoggedIn: state.ui.get('isUserLoggedIn'),
-  displayDrawer: state.ui.get('isNotificationDrawer
+export default connect(mapStateToProps, { displayNotificationDrawer, hideNotificationDrawer })(App);
