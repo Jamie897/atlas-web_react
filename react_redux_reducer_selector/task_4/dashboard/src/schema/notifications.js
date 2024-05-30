@@ -1,31 +1,26 @@
-import { schema, normalize } from 'normalizr';
-import * as notificationsData from '../../notifications.json';
+import * as notificationData from '../../dist/notifications.json';
+import { normalize, schema } from 'normalizr';
 
-// Create user entity
+// define the schema for the notification data
 const user = new schema.Entity('users');
-
-// Create message entity with the key 'messages' and set idAttribute to 'guid'
-const message = new schema.Entity('messages', {}, { idAttribute: 'guid' });
-
-// Create notification entity with author and context
-const notification = new schema.Entity('notifications', {
-  author: user,
-  context: message,
+const message = new schema.Entity('messages', {}, {
+    idAttribute: 'guid'
+});
+export const notification = new schema.Entity('notifications', {
+    author: user,
+    context: message
 });
 
-// Export entities and normalization function
-export { user, message, notification };
+// normalize the data according to the schema
+export const normalizedData = normalize(notificationData.default, [notification]);
 
-export const normalizeData = (data) => normalize(data, [notification]);
+export function getAllNotificationsByUser(userId) {
+    return Object.values(normalizedData.entities.notifications).filter((message) => message.author === userId)
+    .map((message) => normalizedData.entities.messages[message.context]);
+}
 
-// Function that accepts userId as an argument and returns all notifications for that user from the notifications.json file
-export const getAllNotificationsByUser = (userId) => {
-  // Normalize the notifications data
-  const normalizedData = normalizeData(notificationsData.default);
-
-  // Get notifications for the specified user
-  return Object.values(normalizedData.entities.notifications)
-    .filter((notification) => notification.author === userId)
-    .map((notification) => notification.context);
-};
-
+export function notificationsNormalizer(data) {
+    const normalizedData = normalize(data, [notification]);
+    return normalizedData.entities;
+}
+                                                                                                          
