@@ -2,6 +2,17 @@ import React from "react";
 import { mount } from "enzyme";
 import App from "./App";
 import AppContext from "./AppContext";
+import { fromJS } from 'immutable';
+import { mapStateToProps } from './App';
+
+describe('mapStateToProps function', () => {
+  it('returns the right object when passing the state with isLoggedIn as true', () => {
+    const state = fromJS({
+      isUserLoggedIn: true
+    });
+    const props = mapStateToProps(state);
+    expect(props).toEqual({ isLoggedIn: true });
+  });
 
 describe("Test the <App /> component...", () => {
   let wrapper;

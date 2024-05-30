@@ -12,6 +12,8 @@ import CourseList from "../CourseList/CourseList";
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import BodySection from "../BodySection/BodySection";
 import { getLatestNotification } from "../utils/utils";
+import { fromJS } from 'immutable';
+import { mapStateToProps } from './App';
 
 const listCourses = [
   { id: 1, name: 'ES6', credit: 60 },
@@ -158,4 +160,3 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(App);
-
