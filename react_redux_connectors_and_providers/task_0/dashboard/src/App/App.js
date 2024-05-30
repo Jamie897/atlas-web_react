@@ -1,3 +1,5 @@
+// src/App/App.js
+
 import React from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, css } from 'aphrodite';
@@ -117,4 +119,45 @@ class App extends React.Component {
           displayDrawer={displayDrawer}
           listNotifications={listNotifications}
           handleDisplayDrawer={this.handleDisplayDrawer}
-          handleHideDrawer={this.h
+          handleHideDrawer={this.handleHideDrawer}
+          markNotificationAsRead={this.markNotificationAsRead}
+        />
+        <div className={css(styles.body)}>
+          <Header />
+        </div>
+        <div className={css(styles.appBody)}>
+          {!isLoggedIn ? (
+            <BodySectionWithMarginBottom title="Log in to continue">
+              <Login logIn={this.logIn} />
+            </BodySectionWithMarginBottom>
+          ) : (
+            <BodySectionWithMarginBottom title="Course list">
+              <CourseList listCourses={listCourses} />
+            </BodySectionWithMarginBottom>
+          )}
+          <BodySection title="News from the School">
+            <p>New News</p>
+          </BodySection>
+        </div>
+        <div className={css(styles.footer)}>
+          <Footer />
+        </div>
+      </>
+    );
+  }
+}
+
+App.propTypes = {
+  isLoggedIn: PropTypes.bool,
+  displayDrawer: PropTypes.bool.isRequired,
+  displayNotificationDrawer: PropTypes.func.isRequired,
+  hideNotificationDrawer: PropTypes.func.isRequired,
+};
+
+App.defaultProps = {
+  isLoggedIn: false,
+};
+
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.ui.get('isUserLoggedIn'),
+  displayDrawer: state.ui.get('isNotificationDrawer
