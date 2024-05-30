@@ -10,7 +10,7 @@ import CourseList from "../CourseList/CourseList";
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import BodySection from "../BodySection/BodySection";
 import { getLatestNotification } from "../utils/utils";
-import { displayNotificationDrawer, hideNotificationDrawer } from './actions';
+import { displayNotificationDrawer, hideNotificationDrawer } from '../actions/uiActionCreators';
 
 const listCourses = [
   { id: 1, name: 'ES6', credit: 60 },
