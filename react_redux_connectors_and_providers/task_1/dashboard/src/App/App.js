@@ -110,9 +110,8 @@ class App extends React.Component {
   }
 
   render() {
-    const { displayDrawer } = this.props;
-    const { listNotifications } = this.state;
-  
+    const { displayDrawer, listNotifications } = this.state;
+    const { isLoggedIn } = this.props;
 
     return (
       <>
@@ -156,7 +155,8 @@ App.defaultProps = {
   isLoggedIn: false,
 };
 
-export const mapStateToProps = (state) => ({
-  isLoggedIn: state.get('isUserLoggedIn'),
-  displayDrawer: state.get('isNotificationDrawerVisible'),
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.ui.get('isUserLoggedIn'),
 });
+
+export default connect(mapStateToProps)(App);
