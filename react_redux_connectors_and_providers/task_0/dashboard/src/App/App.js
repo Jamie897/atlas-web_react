@@ -1,5 +1,3 @@
-// src/App/App.js
-
 import React from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, css } from 'aphrodite';
@@ -12,9 +10,7 @@ import CourseList from "../CourseList/CourseList";
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import BodySection from "../BodySection/BodySection";
 import { getLatestNotification } from "../utils/utils";
-import { fromJS } from 'immutable';
-import { mapStateToProps } from './App';
-import { displayNotificationDrawer, hideNotificationDrawer };
+import { displayNotificationDrawer, hideNotificationDrawer } from './actions';
 
 const listCourses = [
   { id: 1, name: 'ES6', credit: 60 },
@@ -111,7 +107,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { displayDrawer } = this.props;
+    const { displayDrawer, isLoggedIn } = this.props;
     const { listNotifications } = this.state;
   
 
@@ -121,43 +117,4 @@ class App extends React.Component {
           displayDrawer={displayDrawer}
           listNotifications={listNotifications}
           handleDisplayDrawer={this.handleDisplayDrawer}
-          handleHideDrawer={this.handleHideDrawer}
-          markNotificationAsRead={this.markNotificationAsRead}
-        />
-        <div className={css(styles.body)}>
-          <Header />
-        </div>
-        <div className={css(styles.appBody)}>
-          {!isLoggedIn ? (
-            <BodySectionWithMarginBottom title="Log in to continue">
-              <Login logIn={this.logIn} />
-            </BodySectionWithMarginBottom>
-          ) : (
-            <BodySectionWithMarginBottom title="Course list">
-              <CourseList listCourses={listCourses} />
-            </BodySectionWithMarginBottom>
-          )}
-          <BodySection title="News from the School">
-            <p>New News</p>
-          </BodySection>
-        </div>
-        <div className={css(styles.footer)}>
-          <Footer />
-        </div>
-      </>
-    );
-  }
-}
-
-App.propTypes = {
-  isLoggedIn: PropTypes.bool,
-  displayDrawer: PropTypes.bool.isRequired,
-  displayNotificationDrawer: PropTypes.func.isRequired,
-  hideNotificationDrawer: PropTypes.func.isRequired,
-};
-
-App.defaultProps = {
-  isLoggedIn: false,
-};
-
-export default connect(mapStateToProps, { displayNotificationDrawer, hideNotificationDrawer })(App);
+          handleHideDrawer={this.h
