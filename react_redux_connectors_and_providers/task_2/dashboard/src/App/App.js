@@ -1,144 +1,106 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { StyleSheet, css } from 'aphrodite';
+import React from 'react';
 import { connect } from 'react-redux';
-import Notifications from "../Notifications/Notifications";
-import Header from "../Header/Header";
-import Login from "../Login/Login";
-import Footer from "../Footer/Footer";
-import CourseList from "../CourseList/CourseList";
-import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
-import BodySection from "../BodySection/BodySection";
-import { getLatestNotification } from "../utils/utils";
-import { displayNotificationDrawer, hideNotificationDrawer } from '../actions/uiActionCreators';
+import Header from '../Header/Header';
+import Login from '../Login/Login';
+import Footer from '../Footer/Footer';
+import Notifications from '../Notifications/Notifications';
+import CourseList from '../CourseList/CourseList';
+import BodySection from '../BodySection/BodySection';
+import SchoolNews from '../SchoolNews/SchoolNews';
+import { StyleSheet, css } from 'aphrodite';
+import PropTypes from 'prop-types';
+import { Map, List } from 'immutable';
+import { markAsRead } from '../actions/notificationActionCreators';
+import {
+  loginRequest,
+  displayNotificationDrawer,
+  hideNotificationDrawer,
+  logout,
+} from '../actions/uiActionCreators';
+import { bindActionCreators } from 'redux';
+
+
+const styles = StyleSheet.create({
+
+  header: {
+    fontFamily: "'Galano Grotesque Alt', sans-serif",
+    borderBottom: '5px solid #00003C',
+    backgroundColor: '#fefae8',
+  },
+
+  body: {
+    fontFamily: "'Galano Grotesque Alt', sans-serif",
+    padding: '1rem',
+    minHeight: 'calc(100vh - 190px)',
+  },
+
+  footer: {
+    borderTop: '5px solid #00003C',
+    textAlign: 'center',
+    fontStyle: 'italic',
+  },
+});
 
 const listCourses = [
   { id: 1, name: 'ES6', credit: 60 },
   { id: 2, name: 'Webpack', credit: 20 },
-  { id: 3, name: 'React', credit: 40 }
+  { id: 3, name: 'React', credit: 40 },
 ];
 
 const listNotifications = [
   { id: 1, type: 'default', value: 'New course available' },
   { id: 2, type: 'urgent', value: 'New resume available' },
-  { id: 3, type: 'urgent', html: { __html: getLatestNotification() } }
+  { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' } },
 ];
 
-const styles = StyleSheet.create({
-  body: {
-    margin: 0,
-    padding: 0,
-    fontFamily: 'Arial, sans-serif',
-  },
-  appBody: {
-    backgroundColor: '#f5f5f5',
-  },
-  footer: {
-    textAlign: 'center',
-    marginTop: '20px',
-    color: '#888',
-  },
-});
-
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      displayDrawer: false,
-      listNotifications: listNotifications, // Set listNotifications within the state
-    };
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
-    this.handleHideDrawer = this.handleHideDrawer.bind(this);
-    this.logIn = this.logIn.bind(this);
-    this.logOut = this.logOut.bind(this);
-    this.markNotificationAsRead = this.markNotificationAsRead.bind(this); // Create markNotificationAsRead function
-  }
+export class App extends React.Component {
 
   componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyDown);
+    document.addEventListener('keydown', this.handleKeydown);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyDown);
+    document.removeEventListener('keydown', this.handleKeydown);
   }
 
-  handleKeyDown(event) {
+  handleLogin = (email, password) => {
+    // Dispatch the loginRequest action creator
+    this.props.login(email, password);
+  }
+
+  handleKeydown = (event) => {
     if (event.ctrlKey && event.key === 'h') {
       event.preventDefault();
       alert('Logging you out');
-      this.logOut();
+      this.props.logout();
     }
   }
 
-  handleDisplayDrawer() {
-    this.setState({ displayDrawer: true });
-  }
-
-  handleHideDrawer() {
-    this.setState({ displayDrawer: false });
-  }
-
-  logIn(email, password) {
-    this.setState({
-      user: {
-        email: email,
-        password: password,
-        isLoggedIn: true,
-      },
-    });
-  }
-
-  logOut() {
-    this.setState({
-      user: {
-        email: '',
-        password: '',
-        isLoggedIn: false,
-      },
-    });
-  }
-
-  // Function to mark notification as read
-  markNotificationAsRead(id) {
-    this.setState(prevState => ({
-      listNotifications: prevState.listNotifications.filter(notification => notification.id !== id)
-    }));
-  }
 
   render() {
-    const { displayDrawer, isLoggedIn } = this.props;
-    const { listNotifications } = this.state;
-  
+    console.log(this.props);
+    const { isLoggedIn, displayDrawer, displayNotificationDrawer, hideNotificationDrawer } = this.props;
 
     return (
       <>
         <Notifications
-          displayDrawer={displayDrawer}
           listNotifications={listNotifications}
-          handleDisplayDrawer={this.handleDisplayDrawer}
-          handleHideDrawer={this.handleHideDrawer}
-          markNotificationAsRead={this.markNotificationAsRead}
+          displayDrawer={displayDrawer}
+          handleDisplayDrawer={displayNotificationDrawer}
+          handleHideDrawer={hideNotificationDrawer}
+          markAsRead={this.props.markAsRead}
         />
-        <div className={css(styles.body)}>
-          <Header />
-        </div>
-        <div className={css(styles.appBody)}>
-          {!isLoggedIn ? (
-            <BodySectionWithMarginBottom title="Log in to continue">
-              <Login logIn={this.logIn} />
-            </BodySectionWithMarginBottom>
-          ) : (
-            <BodySectionWithMarginBottom title="Course list">
-              <CourseList listCourses={listCourses} />
-            </BodySectionWithMarginBottom>
-          )}
-          <BodySection title="News from the School">
-            <p>New News</p>
-          </BodySection>
-        </div>
-        <div className={css(styles.footer)}>
-          <Footer />
+        <div className="App">
+          <div className={`App-header ${css(styles.header)}`} data-testid="app-header">
+            <Header />
+          </div>
+          <div className={`App-body ${css(styles.body)}`}>
+            {isLoggedIn ? <CourseList listCourses={listCourses} /> : <Login onLogin={this.props.login} />}
+            <BodySection title='News from the School'>
+              <SchoolNews /> {/* Use SchoolNews component here */}
+            </BodySection>
+          </div>
+          <Footer className={`App-footer ${css(styles.footer)}`} />
         </div>
       </>
     );
@@ -147,13 +109,41 @@ class App extends React.Component {
 
 App.propTypes = {
   isLoggedIn: PropTypes.bool,
-  displayDrawer: PropTypes.bool.isRequired,
-  displayNotificationDrawer: PropTypes.func.isRequired,
-  hideNotificationDrawer: PropTypes.func.isRequired,
+  displayDrawer: PropTypes.bool,
+  displayNotificationDrawer: PropTypes.func,
+  hideNotificationDrawer: PropTypes.func,
+  logout: PropTypes.func,
+  login: PropTypes.func,
+  markAsRead: PropTypes.func,
 };
 
 App.defaultProps = {
   isLoggedIn: false,
+  displayDrawer: false,
 };
 
-export default connect(mapStateToProps, { displayNotificationDrawer, hideNotificationDrawer })(App);
+export const mapStateToProps = (state = { uiReducer: new Map() }) => {
+  const uiReducer = state.ui || new Map();
+  const isLoggedIn = uiReducer.get('isUserLoggedIn', false);
+  const displayDrawer = uiReducer.get('isNotificationDrawerVisible', false);
+  const listNotificationsImmutable = uiReducer.get('listNotifications', List());
+  const listNotifications = listNotificationsImmutable.toJS();
+
+  return {
+    isLoggedIn,
+    displayDrawer,
+    listNotifications,
+  };
+};
+
+export function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    displayNotificationDrawer,
+    hideNotificationDrawer,
+    logout,
+    markAsRead,
+    login: loginRequest,
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
