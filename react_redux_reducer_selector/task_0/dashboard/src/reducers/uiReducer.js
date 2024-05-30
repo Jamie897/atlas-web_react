@@ -1,5 +1,5 @@
 // reducers/uiReducer.js
-
+import { Map } from 'immutable';
 import {
     DISPLAY_NOTIFICATION_DRAWER,
     HIDE_NOTIFICATION_DRAWER,
