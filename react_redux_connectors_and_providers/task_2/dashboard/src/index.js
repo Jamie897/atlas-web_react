@@ -1,14 +1,13 @@
-// src/index.js
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 import App from './App/App';
 import uiReducer from './reducers/uiReducer';
 
-// Create the Redux store with the uiReducer
-const store = createStore(uiReducer);
+// Create the Redux store with the uiReducer and apply thunk middleware
+const store = createStore(uiReducer, applyMiddleware(thunk));
 
 ReactDOM.render(
   <React.StrictMode>

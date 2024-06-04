@@ -1,11 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import './Footer.css';
 import { getFullYear, getFooterCopy } from '../utils/utils';
-import AppContext from '../App/AppContext'; // Import the context
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-function Footer() {
-  const { user } = useContext(AppContext); // Get the user object from context
-
+function Footer({ user }) {
   return (
     <footer className='footer'>
       <p>
@@ -20,4 +19,24 @@ function Footer() {
   );
 }
 
-export default Footer;
+Footer.propTypes = {
+  user: PropTypes.shape({
+    isLoggedIn: PropTypes.bool,
+    email: PropTypes.string,
+  }),
+};
+
+Footer.defaultProps = {
+  user: {
+    isLoggedIn: false,
+    email: '',
+  },
+};
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.ui.get('user'),
+  };
+};
+
+export default connect(mapStateToProps)(Footer);

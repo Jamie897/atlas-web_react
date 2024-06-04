@@ -1,3 +1,5 @@
+// src/App/App.js
+
 import React from 'react';
 import { connect } from 'react-redux';
 import Header from '../Header/Header';
@@ -17,21 +19,17 @@ import {
 } from '../actions/uiActionCreators';
 import { bindActionCreators } from 'redux';
 
-
 const styles = StyleSheet.create({
-
   header: {
     fontFamily: "'Galano Grotesque Alt', sans-serif",
     borderBottom: '5px solid #00003C',
     backgroundColor: '#fefae8',
   },
-
   body: {
     fontFamily: "'Galano Grotesque Alt', sans-serif",
     padding: '1rem',
     minHeight: 'calc(100vh - 190px)',
   },
-
   footer: {
     borderTop: '5px solid #00003C',
     textAlign: 'center',
@@ -51,8 +49,7 @@ const listNotifications = [
   { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' } },
 ];
 
-export class App extends React.Component {
-
+class App extends React.Component {
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeydown);
   }
@@ -61,23 +58,16 @@ export class App extends React.Component {
     document.removeEventListener('keydown', this.handleKeydown);
   }
 
-  handleLogin = (email, password) => {
-    // Dispatch the loginRequest action creator
-    this.props.login(email, password);
-  }
-
   handleKeydown = (event) => {
     if (event.ctrlKey && event.key === 'h') {
       event.preventDefault();
       alert('Logging you out');
       this.props.logout();
     }
-  }
-
+  };
 
   render() {
-    console.log(this.props);
-    const { isLoggedIn, displayDrawer, displayNotificationDrawer, hideNotificationDrawer } = this.props;
+    const { isLoggedIn, displayDrawer, displayNotificationDrawer, hideNotificationDrawer, login } = this.props;
 
     return (
       <>
@@ -93,7 +83,7 @@ export class App extends React.Component {
             <Header />
           </div>
           <div className={`App-body ${css(styles.body)}`}>
-            {isLoggedIn ? <CourseList listCourses={listCourses} /> : <Login onLogin={this.props.login} />}
+            {isLoggedIn ? <CourseList listCourses={listCourses} /> : <Login onLogin={login} />}
             <BodySection title='News from the School'>
               <SchoolNews /> {/* Use SchoolNews component here */}
             </BodySection>
