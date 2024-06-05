@@ -1,27 +1,50 @@
-import { markAsRead, setNotificationFilter } from './notificationActionCreators';
-import { MARK_AS_READ, SET_TYPE_FILTER } from './notificationActionTypes';
-import { NotificationTypeFilters } from './notificationActionTypes';
+import * as actions from './notificationActionCreators';
+import * as actionTypes from './notificationActionTypes';
 
-describe('notificationActionCreators', () => {
-  describe('markAsRead', () => {
-    it('should create an action to mark an item as read', () => {
-      const index = 1;
-      const expectedAction = {
-        type: MARK_AS_READ,
-        index
-      };
-      expect(markAsRead(index)).toEqual(expectedAction);
-    });
+// Mock fetch for fetchNotifications test
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve([
+      { id: 1, type: 'default', value: 'New course available' },
+      { id: 2, type: 'urgent', value: 'New resume available' },
+    ]),
+  })
+);
+
+describe('notification action creators', () => {
+  it('setLoadingState should create the correct action', () => {
+    const expectedAction = {
+      type: actionTypes.SET_LOADING_STATE,
+      loading: true,
+    };
+    expect(actions.setLoadingState(true)).toEqual(expectedAction);
   });
 
-  describe('setNotificationFilter', () => {
-    it('should create an action to set the notification filter', () => {
-      const filter = NotificationTypeFilters.DEFAULT;
-      const expectedAction = {
-        type: SET_TYPE_FILTER,
-        filter
-      };
-      expect(setNotificationFilter(filter)).toEqual(expectedAction);
+  it('setNotifications should create the correct action', () => {
+    const notifications = [
+      { id: 1, type: 'default', value: 'New course available' },
+      { id: 2, type: 'urgent', value: 'New resume available' },
+    ];
+    const expectedAction = {
+      type: actionTypes.SET_NOTIFICATIONS,
+      notifications,
+    };
+    expect(actions.setNotifications(notifications)).toEqual(expectedAction);
+  });
+
+  it('fetchNotifications should create the correct actions', () => {
+    const dispatch = jest.fn();
+    const notifications = [
+      { id: 1, type: 'default', value: 'New course available' },
+      { id: 2, type: 'urgent', value: 'New resume available' },
+    ];
+    fetch.mockResponseOnce(JSON.stringify(notifications));
+
+    return actions.fetchNotifications()(dispatch).then(() => {
+      expect(dispatch).toHaveBeenCalledWith(actions.setLoadingState(true));
+      expect(dispatch).toHaveBeenCalledWith(actions.setNotifications(notifications));
+      expect(dispatch).toHaveBeenCalledWith(actions.setLoadingState(false));
     });
   });
 });
+
