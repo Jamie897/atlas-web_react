@@ -3,6 +3,7 @@ import { shallow } from "enzyme";
 import Notifications from "./Notifications";
 import { getLatestNotification } from "../utils/utils";
 import NotificationItem from "./NotificationItem";
+import { setNotificationFilter } from "../actions/notificationActions";
 
 describe("Test Notifications.js", () => {
   const listNotifications = [
@@ -12,9 +13,11 @@ describe("Test Notifications.js", () => {
   ];
 
   let fetchNotifications;
+  let setNotificationFilterMock;
 
   beforeEach(() => {
     fetchNotifications = jest.fn();
+    setNotificationFilterMock = jest.fn();
   });
 
   it("clicking on the menu item calls handleDisplayDrawer", () => {
@@ -27,7 +30,7 @@ describe("Test Notifications.js", () => {
   it("clicking on the close button calls handleHideDrawer", () => {
     const handleHideDrawer = jest.fn();
     const wrapper = shallow(<Notifications displayDrawer={true} handleHideDrawer={handleHideDrawer} fetchNotifications={fetchNotifications} />);
-    wrapper.find("button").simulate("click");
+    wrapper.find("button").at(0).simulate("click");
     expect(handleHideDrawer).toHaveBeenCalled();
   });
 
@@ -92,5 +95,17 @@ describe("Test Notifications.js", () => {
   it("should call fetchNotifications when the component is mounted", () => {
     shallow(<Notifications fetchNotifications={fetchNotifications} />);
     expect(fetchNotifications).toHaveBeenCalled();
+  });
+
+  it("clicking on the URGENT button should call setNotificationFilter with URGENT", () => {
+    const wrapper = shallow(<Notifications setNotificationFilter={setNotificationFilterMock} fetchNotifications={fetchNotifications} />);
+    wrapper.find('button').at(1).simulate('click');
+    expect(setNotificationFilterMock).toHaveBeenCalledWith('urgent');
+  });
+
+  it("clicking on the DEFAULT button should call setNotificationFilter with DEFAULT", () => {
+    const wrapper = shallow(<Notifications setNotificationFilter={setNotificationFilterMock} fetchNotifications={fetchNotifications} />);
+    wrapper.find('button').at(2).simulate('click');
+    expect(setNotificationFilterMock).toHaveBeenCalledWith('default');
   });
 });

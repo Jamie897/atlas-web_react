@@ -4,8 +4,8 @@ import { connect } from "react-redux";
 import NotificationItem from "./NotificationItem";
 import closeButton from "../assets/close-icon.png";
 import { StyleSheet, css } from "aphrodite";
-import { getUnreadNotifications } from "../selectors/notificationSelector";
-import { fetchNotifications, markAsRead } from "../actions/notificationActions";
+import { getUnreadNotificationsByType } from "../selectors/notificationSelector";
+import { fetchNotifications, markAsRead, setNotificationFilter } from "../actions/notificationActions";
 
 const styles = StyleSheet.create({
   notifications: {
@@ -27,6 +27,11 @@ const styles = StyleSheet.create({
     padding: "10px",
     borderBottom: "1px solid black",
   },
+  button: {
+    margin: '10px',
+    padding: '10px',
+    cursor: 'pointer',
+  },
 });
 
 class Notifications extends React.PureComponent {
@@ -35,7 +40,7 @@ class Notifications extends React.PureComponent {
   }
 
   render() {
-    const { displayDrawer, handleDisplayDrawer, handleHideDrawer, listNotifications, markAsRead } = this.props;
+    const { displayDrawer, handleDisplayDrawer, handleHideDrawer, listNotifications, markAsRead, setNotificationFilter } = this.props;
     return (
       <>
         <div className={css(styles.menuItem)} onClick={handleDisplayDrawer}>Your notifications</div>
@@ -54,6 +59,10 @@ class Notifications extends React.PureComponent {
               <img src={closeButton} alt="Close button icon" />
             </button>
             <p>Here is the list of notifications</p>
+            <div>
+              <button className={css(styles.button)} onClick={() => setNotificationFilter('urgent')}>‼️</button>
+              <button className={css(styles.button)} onClick={() => setNotificationFilter('default')}>?</button>
+            </div>
             <ul>
               {listNotifications.length === 0 ? (
                 <NotificationItem value="No new notification for now" type="no-new" />
@@ -83,6 +92,7 @@ Notifications.defaultProps = {
   handleHideDrawer: () => {},
   fetchNotifications: () => {},
   markAsRead: () => {},
+  setNotificationFilter: () => {},
 };
 
 Notifications.propTypes = {
@@ -101,15 +111,17 @@ Notifications.propTypes = {
   handleHideDrawer: PropTypes.func,
   fetchNotifications: PropTypes.func,
   markAsRead: PropTypes.func,
+  setNotificationFilter: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({
-  listNotifications: getUnreadNotifications(state),
+  listNotifications: getUnreadNotificationsByType(state),
 });
 
 const mapDispatchToProps = {
   fetchNotifications,
   markAsRead,
+  setNotificationFilter,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Notifications);
