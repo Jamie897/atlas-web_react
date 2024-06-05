@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, css } from 'aphrodite';
+import { connect } from 'react-redux';
+import { logout } from '../actions/uiActionCreators';
 import logo from '../assets/holberton-logo.jpg';
-import AppContext from '../App/AppContext'; // Import the context
 
 const styles = StyleSheet.create({
   header: {
@@ -30,10 +31,12 @@ const styles = StyleSheet.create({
 });
 
 class Header extends React.Component {
-  static contextType = AppContext; // Define the contextType property
+  handleLogout = () => {
+    this.props.logout();
+  };
 
   render() {
-    const { user, logOut } = this.context; // Get user and logOut from context
+    const { user } = this.props;
     const isLoggedIn = user.isLoggedIn; // Extract isLoggedIn from user object
 
     return (
@@ -43,7 +46,7 @@ class Header extends React.Component {
           <h1 className={css(styles.title)}>School dashboard</h1>
         </div>
         {isLoggedIn && ( // Conditionally render the logout section
-          <section className={css(styles.logoutSection)} id='logoutSection' onClick={logOut}>
+          <section className={css(styles.logoutSection)} id='logoutSection' onClick={this.handleLogout}>
             Welcome {user.email} (logout)
           </section>
         )}
@@ -52,7 +55,26 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+Header.propTypes = {
+  user: PropTypes.shape({
+    isLoggedIn: PropTypes.bool,
+    email: PropTypes.string,
+  }),
+  logout: PropTypes.func.isRequired,
+};
 
-Header.contextType = AppContext; // Set the contextType outside the class definition for compatibility
+Header.defaultProps = {
+  user: {
+    isLoggedIn: false,
+    email: '',
+  },
+};
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.ui.get('user'),
+  };
+};
+
+export default connect(mapStateToProps, { logout })(Header);
 
