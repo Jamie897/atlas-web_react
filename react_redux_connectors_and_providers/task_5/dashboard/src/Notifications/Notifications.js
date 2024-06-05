@@ -1,9 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import NotificationItem from "./NotificationItem";
 import closeButton from "../assets/close-icon.png";
 import NotificationItemShape from "./NotificationItemShape";
 import { StyleSheet, css } from "aphrodite";
+import { fetchNotifications } from "../actions/notificationActionCreators";
 
 const styles = StyleSheet.create({
   notifications: {
@@ -28,6 +31,10 @@ const styles = StyleSheet.create({
 });
 
 class Notifications extends React.PureComponent {
+  componentDidMount() {
+    this.props.fetchNotifications();
+  }
+
   render() {
     const { displayDrawer, handleDisplayDrawer, handleHideDrawer, listNotifications, markNotificationAsRead } = this.props;
     return (
@@ -48,45 +55,4 @@ class Notifications extends React.PureComponent {
             >
               <img src={closeButton} alt="Close button icon" />
             </button>
-            <p>Here is the list of notifications</p>
-            <ul>
-              {listNotifications.length === 0 ? (
-                <NotificationItem value="No new notification for now" type="no-new" />
-              ) : (
-                listNotifications.map((not) => (
-                  <NotificationItem
-                    key={not.id}
-                    type={not.type}
-                    value={not.value}
-                    html={not.html}
-                    markAsRead={() => {
-                      markNotificationAsRead(not.id);
-                    }}
-                  />
-                ))
-              )}
-            </ul>
-          </div>
-        )}
-      </>
-    );
-  }
-}
-
-Notifications.defaultProps = {
-  displayDrawer: false,
-  listNotifications: [],
-  handleDisplayDrawer: () => {},
-  handleHideDrawer: () => {},
-  markNotificationAsRead: () => {},
-};
-
-Notifications.propTypes = {
-  displayDrawer: PropTypes.bool,
-  listNotifications: PropTypes.arrayOf(NotificationItemShape),
-  handleDisplayDrawer: PropTypes.func,
-  handleHideDrawer: PropTypes.func,
-  markNotificationAsRead: PropTypes.func,
-};
-
-export default Notifications;
+            <p>Here is 

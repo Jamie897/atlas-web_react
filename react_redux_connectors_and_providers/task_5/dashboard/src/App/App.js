@@ -1,5 +1,3 @@
-// src/App/App.js
-
 import React from 'react';
 import { connect } from 'react-redux';
 import Header from '../Header/Header';
@@ -43,12 +41,6 @@ const listCourses = [
   { id: 3, name: 'React', credit: 40 },
 ];
 
-const listNotifications = [
-  { id: 1, type: 'default', value: 'New course available' },
-  { id: 2, type: 'urgent', value: 'New resume available' },
-  { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' } },
-];
-
 class App extends React.Component {
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeydown);
@@ -72,11 +64,9 @@ class App extends React.Component {
     return (
       <>
         <Notifications
-          listNotifications={listNotifications}
           displayDrawer={displayDrawer}
           handleDisplayDrawer={displayNotificationDrawer}
           handleHideDrawer={hideNotificationDrawer}
-          markAsRead={this.props.markAsRead}
         />
         <div className="App">
           <div className={`App-header ${css(styles.header)}`} data-testid="app-header">
@@ -102,7 +92,6 @@ App.propTypes = {
   hideNotificationDrawer: PropTypes.func,
   logout: PropTypes.func,
   login: PropTypes.func,
-  markAsRead: PropTypes.func,
 };
 
 App.defaultProps = {
@@ -129,7 +118,6 @@ export function mapDispatchToProps(dispatch) {
     displayNotificationDrawer,
     hideNotificationDrawer,
     logout,
-    markAsRead,
     login: loginRequest,
   }, dispatch);
 }
